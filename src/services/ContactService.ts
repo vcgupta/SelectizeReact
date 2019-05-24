@@ -4,26 +4,26 @@ export default class ContactService {
         return [
             {
                 contactId: "id1",
-                email: "something1@emails",
-                imageUrl: "https://via.placeholder.com/50",
+                email: "ChikuBhattarai@emails",
+                imageUrl: "https://via.placeholder.com/50/008811/ffffff/?text=CB",
                 name: "Chiku Bhattarai"
             },
             {
                 contactId: "id2",
-                email: "something2@emails",
-                imageUrl: "https://via.placeholder.com/50",
+                email: "Monty.Pallavsomething2@emails",
+                imageUrl: "https://via.placeholder.com/50/668811/ffffff/?text=MP",
                 name: "Monty Pallav"
             },
             {
                 contactId: "id3",
-                email: "something3@emails",
-                imageUrl: "https://via.placeholder.com/50",
+                email: "NergisC.P.Paulo@emails",
+                imageUrl: "https://via.placeholder.com/50/as2111/ffffff/?text=NP",
                 name: "Nergis Paulo"
             },
             {
                 contactId: "id4",
-                email: "4something@emails",
-                imageUrl: "https://via.placeholder.com/50",
+                email: "SantaSHSHChirtina@emails",
+                imageUrl: "https://via.placeholder.com/50/acff11/ff3498/?text=SC",
                 name: "Santa Chirtina"
             },
         ]

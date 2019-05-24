@@ -1,0 +1,28 @@
+@import "../Variables.scss";
+
+.selected-items {
+  display: flex;
+  border: 1px solid black;
+  width: 200px;
+  margin: 1px;
+  padding: 2px;
+  border-radius: 3px;
+
+  img {
+    @include border-radius(50%);
+
+    height: ($inputBoxHeight - 8);
+    margin: 1px;
+  }
+  .remove {
+    margin: 2px;
+    padding: 2px;
+    width: 20px;
+    cursor: pointer;
+  }
+  .short-details {
+    span {
+      white-space: pre;
+    }
+  }
+}

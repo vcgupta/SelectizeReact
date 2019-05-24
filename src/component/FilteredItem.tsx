@@ -4,11 +4,11 @@ import './FilteredItem.scss';
 
 export interface IFilteredItemProps{
     contact: IContactDetails,
-    onSelectContact: ()=>void
+    onSelectContact: (contactId:string)=>void
 }
 export default class FilteredItem extends React.Component<IFilteredItemProps>{
     public static defaultProps: Partial<IFilteredItemProps> ={
-        onSelectContact : ()=>{}
+        onSelectContact : (contactId:string)=>{}
     }
     constructor(props: IFilteredItemProps){
         super(props);
@@ -26,10 +26,10 @@ export default class FilteredItem extends React.Component<IFilteredItemProps>{
         </div>)
     }
 
-    onClickItemSelect(){
-        console.log("Select Contact");
+    onClickItemSelect(event: any){
+        console.log("Select Contact", this.props.contact.contactId);
         if(this.props.onSelectContact){
-            this.props.onSelectContact();
+            this.props.onSelectContact(this.props.contact.contactId);
         }
     }
 }

@@ -17,10 +17,24 @@ export interface IFilteredListProps {
 }
 
 class FilteredList extends React.PureComponent<IFilteredListProps>{
+    private filteredDivRef: any;
+    private hideHandler :any;
     public static defaultProps = {
         selectedContacts: [],
         contactList: {},
-        onSelectContact: (contactId:string)=>{}
+        onSelectContact: (contactId: string) => { }
+    }
+
+    constructor(props: IFilteredListProps) {
+        super(props);
+        this.addDocumentClickHandler();
+        this.onSelectSuccess = this.onSelectSuccess.bind(this);
+        this.filteredDivRef = React.createRef();
+        this.hideMenuOnClickOutside =  this.hideMenuOnClickOutside.bind(this);
+        const hideClickHandler = this.hideMenuOnClickOutside;
+        this.hideHandler = (ev:any)=>{
+            hideClickHandler(ev);
+        } 
     }
     render() {
 
@@ -37,13 +51,29 @@ class FilteredList extends React.PureComponent<IFilteredListProps>{
             }
         }
         return (
-            <div className="filtered-items">
+            <div className="filtered-items" ref={this.filteredDivRef}>
                 {items}
             </div>);
     }
 
-    onSelectSuccess() {
-        console.log("Close the list here");
+    onSelectSuccess(contactId: string) {
+        this.props.onSelectContact!(contactId);
+        //console.log("Close the list here");
+        
+    }
+    addDocumentClickHandler() {
+       
+        document.addEventListener('click', this.hideHandler);
+    }
+
+    hideMenuOnClickOutside(ev: MouseEvent) {
+        if (this.filteredDivRef && !this.filteredDivRef.contains(ev.target)) {
+            console.log("Close menu", ev);
+            this.props.onCloseFilterList();
+        }
+    }
+    componentWillUnmount(){
+        document.removeEventListener('click', this.hideHandler);
     }
 }
 

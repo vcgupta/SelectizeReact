@@ -3,17 +3,24 @@ import { connect } from 'react-redux';
 import { IStoreState, IContactCollection } from '../data/dataDefinitions';
 import { initialState } from '../data/Reducers';
 import SelectedItem from './SelectedItem';
+import './SelectedList.scss';
+import { removeFromSelectedList, IAction } from '../data/Actions';
+import { Dispatch } from 'redux';
 
 export interface ISelectedListProps {
     contactList?: IContactCollection,
     selectedContacts?: string[],
+    onRemoveSelectedContact?: (contactId:string)=>void
 }
 
 class SelectedList extends React.Component<ISelectedListProps>{
     public static defaultProps = {
-
         contactList: {},
         selectedContacts: [],
+    }
+    constructor(props: ISelectedListProps){
+        super(props);
+        this.onRemoveContact = this.onRemoveContact.bind(this);
     }
     render() {
         const SelectedContactListItem = this.props.selectedContacts!
@@ -30,6 +37,9 @@ class SelectedList extends React.Component<ISelectedListProps>{
 
     onRemoveContact(contactId: string) {
         console.log("Remove contact with ID: ", contactId);
+        if(this.props.onRemoveSelectedContact){
+            this.props.onRemoveSelectedContact(contactId);
+        }
     }
 }
 
@@ -42,4 +52,14 @@ function mapStateToProps(state: IStoreState = initialState, ownProps: ISelectedL
     }
 }
 
-export default connect(mapStateToProps, null)(SelectedList);
+
+function mapDispatchToProps(dispatch: Dispatch<IAction>, ownProps: ISelectedListProps) {
+    return {
+        onRemoveSelectedContact: function (contactId: string) {
+            dispatch(removeFromSelectedList(contactId));
+        }
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectedList);

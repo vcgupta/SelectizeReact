@@ -1,5 +1,5 @@
 import { IContactCollection } from "./dataDefinitions";
-import { ADD_TO_SELECTED_LIST } from "./Constants";
+import { ADD_TO_SELECTED_LIST, REMOVE_FROM_SELECTED_LIST } from "./Constants";
 
 
 
@@ -26,6 +26,6 @@ export function addToSelectedList(contactId: string): IAddToSelectedContactsActi
 export function removeFromSelectedList(contactId: string): IRemoveFromSelectedContactsAction {
     return {
         contactId,
-        type: ADD_TO_SELECTED_LIST
+        type: REMOVE_FROM_SELECTED_LIST
     }
 }

@@ -5,7 +5,8 @@ import FilteredList from './FilteredList';
 import SelectedList from './SelectedList';
 
 export interface IInputBoxState {
-    filterText: string
+    filterText: string,
+    isFilterListVisible: boolean
 }
 
 export interface IInputBoxProps {
@@ -13,7 +14,7 @@ export interface IInputBoxProps {
 }
 
 export default class InputBox extends React.Component<IInputBoxProps, IInputBoxState> {
-    private inputRef: any;
+    private inputRef: any; private filterListRef: any;
     public static defaultProps: IInputBoxProps = {
         selectedContacts: []
     }
@@ -22,48 +23,55 @@ export default class InputBox extends React.Component<IInputBoxProps, IInputBoxS
         this.handleClickOnSelectionDiv = this.handleClickOnSelectionDiv.bind(this);
         this.closeFilterList = this.closeFilterList.bind(this);
         this.inputRef = React.createRef();
+        this.filterListRef = React.createRef();
         this.state = {
-            filterText:""
+            filterText: "",
+            isFilterListVisible: false
         }
         this.onChangeSearchText = this.onChangeSearchText.bind(this);
+        this.onFocusInSearchText = this.onFocusInSearchText.bind(this);
+        this.onFocusOutSearchText = this.onFocusOutSearchText.bind(this);
     }
 
     render() {
-        // const contactDetailsList = [this.selectedContact({
-        //     contactId: "2dssd",
-        //     email: "something@emails",
-        //     imageUrl: "https://via.placeholder.com/50",
-        //     name: "Your name here"
-        // }), this.selectedContact({
-        //     contactId: "2dssd",
-        //     email: "something@emails",
-        //     imageUrl: "https://via.placeholder.com/50",
-        //     name: "Your name here 3"
-        // })];
         return (
             <div className="input-box" onClick={this.handleClickOnSelectionDiv}>
                 {/* {contactDetailsList} */}
                 <SelectedList />
-                <input type="text" ref={this.inputRef} onChange={this.onChangeSearchText} />
-                <FilteredList filterText={this.state.filterText} onCloseFilterList={this.closeFilterList} />
+
+                <input type="text" ref={this.inputRef}
+                    onChange={this.onChangeSearchText}
+                    onFocus={this.onFocusInSearchText}
+                    onBlur={this.onFocusOutSearchText} />
+                {
+                    this.state.isFilterListVisible &&
+                    <FilteredList ref={this.filterListRef}
+                        filterText={this.state.filterText}
+                        onCloseFilterList={this.closeFilterList} />
+                }
             </div>
         )
     }
 
-    // selectedContact(contact: IContactDetails) {
-    //     return (
-
-    //     )
-    // }
-
     closeFilterList() {
         console.log("Close the filter list now");
+        this.setState({ isFilterListVisible: false });
     }
 
     onChangeSearchText(ev: React.ChangeEvent<HTMLInputElement>) {
         const val = (ev.currentTarget as HTMLInputElement).value;
         console.log("Filtering by: ", val);
-        this.setState({ filterText:  val});
+        this.setState({ filterText: val });
+        (ev.currentTarget as HTMLInputElement).width = (val.length * 15);
+    }
+
+    onFocusInSearchText(ev: any) {
+        console.log("Focus in");
+        this.setState({ isFilterListVisible: true });
+    }
+    onFocusOutSearchText(ev: any) {
+        console.log("Focus out");
+        //this.setState({ isFilterListVisible: false });
     }
 
     handleClickOnSelectionDiv() {
