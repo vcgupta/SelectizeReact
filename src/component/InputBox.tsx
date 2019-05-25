@@ -1,12 +1,13 @@
 import * as React from 'react';
 import './InputBox.scss';
-import { IContactDetails } from '../data/dataDefinitions';
 import FilteredList from './FilteredList';
 import SelectedList from './SelectedList';
 
 export interface IInputBoxState {
     filterText: string,
-    isFilterListVisible: boolean
+    isFilterListVisible: boolean,
+    filterListLeftPosition: number,
+    filterListTopPosition: number,
 }
 
 export interface IInputBoxProps {
@@ -14,7 +15,8 @@ export interface IInputBoxProps {
 }
 
 export default class InputBox extends React.Component<IInputBoxProps, IInputBoxState> {
-    private inputRef: any; private filterListRef: any;
+    private inputRef: any; private inputBoxRef: any;
+    private filterListRef: any;
     public static defaultProps: IInputBoxProps = {
         selectedContacts: []
     }
@@ -23,55 +25,71 @@ export default class InputBox extends React.Component<IInputBoxProps, IInputBoxS
         this.handleClickOnSelectionDiv = this.handleClickOnSelectionDiv.bind(this);
         this.closeFilterList = this.closeFilterList.bind(this);
         this.inputRef = React.createRef();
+        this.inputBoxRef = React.createRef();
         this.filterListRef = React.createRef();
         this.state = {
             filterText: "",
-            isFilterListVisible: false
+            isFilterListVisible: false,
+            filterListLeftPosition: 0,
+            filterListTopPosition: 0
         }
         this.onChangeSearchText = this.onChangeSearchText.bind(this);
         this.onFocusInSearchText = this.onFocusInSearchText.bind(this);
         this.onFocusOutSearchText = this.onFocusOutSearchText.bind(this);
+
     }
 
     render() {
         return (
-            <div className="input-box" onClick={this.handleClickOnSelectionDiv}>
-                {/* {contactDetailsList} */}
+            <div ref={this.inputBoxRef}
+                className="input-box"
+                onClick={this.handleClickOnSelectionDiv}>
+
                 <SelectedList />
 
                 <input type="text" ref={this.inputRef}
+                    style={{ width: this.getWidth() }}
                     onChange={this.onChangeSearchText}
                     onFocus={this.onFocusInSearchText}
                     onBlur={this.onFocusOutSearchText} />
                 {
                     this.state.isFilterListVisible &&
                     <FilteredList ref={this.filterListRef}
+                        positionLeft={this.state.filterListLeftPosition}
+                        positionTop={this.state.filterListTopPosition}
                         filterText={this.state.filterText}
-                        onCloseFilterList={this.closeFilterList} />
+                        onCloseFilterList={this.closeFilterList}
+                        inputboxRef={this.inputBoxRef} />
                 }
             </div>
         )
     }
 
     closeFilterList() {
-        console.log("Close the filter list now");
         this.setState({ isFilterListVisible: false });
+    }
+
+    getWidth() {
+        return this.state.filterText.length * 30 + 4;
     }
 
     onChangeSearchText(ev: React.ChangeEvent<HTMLInputElement>) {
         const val = (ev.currentTarget as HTMLInputElement).value;
-        console.log("Filtering by: ", val);
         this.setState({ filterText: val });
-        (ev.currentTarget as HTMLInputElement).width = (val.length * 15);
     }
 
     onFocusInSearchText(ev: any) {
-        console.log("Focus in");
-        this.setState({ isFilterListVisible: true });
+        //const { left, top } = ev.currentTarget.getBoundingClientRect();
+        //TODO: Currectly set the position
+        const left = 0, top=this.inputBoxRef.current.getBoundingClientRect().height;
+        this.setState({
+            isFilterListVisible: true,
+            filterListLeftPosition: left,
+            filterListTopPosition: top+40
+        });
     }
     onFocusOutSearchText(ev: any) {
         console.log("Focus out");
-        //this.setState({ isFilterListVisible: false });
     }
 
     handleClickOnSelectionDiv() {

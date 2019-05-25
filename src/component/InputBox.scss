@@ -8,8 +8,8 @@
 
   border-radius: 21px;
   background: #d7d7d7;
-  
-  input{
+
+  input {
     width: 4px;
     border: 0px;
     background-color: inherit;
@@ -17,8 +17,9 @@
     height: 40px;
     font-size: 35px;
 
-    &:focus{
-      background-color: inherit
+    &:focus {
+      background-color: inherit;
+      outline: none;
     }
   }
 }
